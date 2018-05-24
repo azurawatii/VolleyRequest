@@ -1,5 +1,6 @@
 package com.example.taruc.volleyrequest;
 
+import android.graphics.Bitmap;
 import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -24,10 +26,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private Button buttonRequest;
     private ImageView imageView;
-
     RequestQueue requestQueue;
 
     String url = "https://api.myjson.com/bins/708ei";
+
+    String imageUrl = "http://azurawatii.000webhostapp.com/images/pic.png";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +80,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        //do image request from 000webhost.com
+        ImageRequest imageRequest = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                //image request is successful
+                imageView.setImageBitmap(response);
+            }
+        }, 0, 0, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
         stringRequest.setTag("REQUEST");
         //add string request into requestQueue
         requestQueue.add(stringRequest);
+        requestQueue.add(imageRequest);
     }
 
     @Override
